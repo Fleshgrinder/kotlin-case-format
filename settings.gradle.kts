@@ -1,1 +1,2 @@
-rootProject.name = "kotlin-case-format"
+rootProject.name = "case-format"
+enableFeaturePreview("STABLE_PUBLISHING")
