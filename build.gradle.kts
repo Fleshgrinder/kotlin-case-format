@@ -1,3 +1,4 @@
+import org.intellij.lang.annotations.Language
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.dokka.gradle.LinkMapping
 import org.jetbrains.dokka.gradle.PackageOptions
@@ -24,7 +25,6 @@ dependencies {
 
     val junitVersion = v("org.junit.jupiter.version")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
 
@@ -34,9 +34,23 @@ repositories {
 
 tasks.remove(tasks["javadoc"])
 
+fun DokkaTask.addLinkMapping(dir: String, url: String, suffix: String) = apply {
+    linkMappings.add(LinkMapping().apply {
+        this.dir = dir
+        this.url = url
+        this.suffix = suffix
+    })
+}
+
 val dokka by tasks.getting(DokkaTask::class) {
     outputDirectory = "$buildDir/javadoc"
     includes = listOf("README.md")
+    addLinkMapping(
+        dir = "src/main/kotlin",
+        url = "https://github.com/Fleshgrinder/kotlin-case-format/tree/master/src/main/kotlin",
+        suffix = "#L"
+    )
+    samples += "$rootDir/src/test/kotlin"
 }
 
 val docs by tasks.registering(Copy::class) {
@@ -44,13 +58,21 @@ val docs by tasks.registering(Copy::class) {
     description = "Copies the Dokka generated documentation into the `/docs` directory for GitHub publishing."
     dependsOn("cleanDocs", dokka)
     from("${dokka.outputDirectory}/style.css")
+
+    val hljs = """
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/styles/atom-one-dark.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/highlight.min.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/languages/kotlin.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    """
+
     from("${dokka.outputDirectory}/${dokka.moduleName}") {
         eachFile {
             println(path)
             filter {
                 when (path) {
                     "package-list" -> if (it.startsWith('$')) "" else it
-                    else -> it.replace("../style.css", "./style.css")
+                    else -> it.replace("../style.css\">", "./style.css\">$hljs")
                 }
             }
         }

@@ -3,12 +3,17 @@
 <meta charset="UTF-8">
 <title>case-format</title>
 <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/styles/atom-one-dark.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/highlight.min.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/languages/kotlin.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
 </HEAD>
 <BODY>
 <a href="./index.html">case-format</a><br/>
 <br/>
 <p>The <code>case-format</code> module provides string extension functions to convert between
-various case formats (<em>camelCase</em>, <em>dash-case</em>, <em>dot.case</em>, <em>snakecase</em>).</p>
+various case formats (<em>camelCase</em>, <em>dash-case</em>, …).</p>
 <ul><li><a href="#installing">Installing</a></li>
 <li><a href="#usage">Usage</a></li>
 <li><a href="#project-info">Project Info</a></li>
@@ -16,14 +21,14 @@ various case formats (<em>camelCase</em>, <em>dash-case</em>, <em>dot.case</em>,
 <h2>Installing</h2>
 <p>The module is available from both <a href="https://bintray.com/fleshgrinder/com.fleshgrinder.kotlin/case-format">JCenter</a> and <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.fleshgrinder%22%20AND%20a%3A%22kotlin-case-format%22">Maven Central</a>.</p>
 <h3>Gradle</h3>
-<p>Add the following to your <code>build.gradle.kts</code> script:</p>
-<pre><code class="lang-kotlin">dependencies {
+<pre><code class="lang-kotlin">// build.gradle.kts
+dependencies {
     implementation("com.fleshgrinder.kotlin:case-format:1.0.0")
 }
 </code></pre>
 <h3>Maven</h3>
-<p>Add the following to your <code>pom.xml</code>:</p>
-<pre><code class="lang-xml">&lt;dependency&gt;
+<pre><code class="lang-xml">&lt;!-- pom.xml --&gt;
+&lt;dependency&gt;
     &lt;groupId&gt;com.fleshgrinder.kotlin&lt;/groupId&gt;
     &lt;artifactId&gt;case-format&lt;/artifactId&gt;
     &lt;version&gt;1.0.0&lt;/version&gt;
@@ -31,6 +36,7 @@ various case formats (<em>camelCase</em>, <em>dash-case</em>, <em>dot.case</em>,
 &lt;/dependency&gt;
 </code></pre>
 <h2>Usage</h2>
+<p>Please refer to the <a href="https://fleshgrinder.github.io/kotlin-case-format/com.fleshgrinder.extensions.kotlin/kotlin.-string/index.html">module documentation</a> for usage information and examples.</p>
 <h2>Project Info</h2>
 <ul><li>Please read <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> if you want to contribute, 
   which would be very welcome.</li>

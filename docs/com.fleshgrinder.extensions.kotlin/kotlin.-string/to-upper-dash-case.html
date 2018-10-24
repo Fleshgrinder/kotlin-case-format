@@ -3,6 +3,11 @@
 <meta charset="UTF-8">
 <title>toUpperDashCase - case-format</title>
 <link rel="stylesheet" href="../.././style.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/styles/atom-one-dark.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/highlight.min.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/languages/kotlin.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
 </HEAD>
 <BODY>
 <a href="../../index.html">case-format</a>&nbsp;/&nbsp;<a href="../index.html">com.fleshgrinder.extensions.kotlin</a>&nbsp;/&nbsp;<a href="index.html">kotlin.String</a>&nbsp;/&nbsp;<a href="./to-upper-dash-case.html">toUpperDashCase</a><br/>
@@ -10,6 +15,20 @@
 <h1>toUpperDashCase</h1>
 <a name="com.fleshgrinder.extensions.kotlin$toUpperDashCase(kotlin.String, kotlin.CharArray)"></a>
 <code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">toUpperDashCase</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.fleshgrinder.extensions.kotlin$toUpperDashCase(kotlin.String, kotlin.CharArray)/ignore">ignore</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-char/index.html"><span class="identifier">Char</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
-<p>Convert this string to <code>UPPER-DASH-CASE</code></p>
+<p>Format this <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> in <strong>UPPER-DASH-CASE</strong> (aka. <em>upper hyphen case</em>,
+<em>upper kebab case</em>, …)</p>
+<pre><code class="lang-kotlin">assertEquals("", "".toUpperDashCase()) {
+    "empty strings are returned as-is"
+}</code></pre>
+<h3>Parameters</h3>
+<p><a name="ignore"></a>
+<code>ignore</code> - can be used to specify characters that should be included
+verbatim in the result, note that they are still considered separators.</p>
+<p><strong>Receiver</strong><br/>
+<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> to format</p>
+<p><strong>Return</strong><br/>
+<strong>UPPER-DASH-CASE</strong> formatted <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></p>
+<p><strong>Since</strong><br/>
+1.0.0</p>
 </BODY>
 </HTML>

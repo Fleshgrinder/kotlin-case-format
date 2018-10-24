@@ -1,347 +1,190 @@
 package com.fleshgrinder.extensions.kotlin
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.api.Test
 
-class CaseFormatTest {
-    @ParameterizedTest
-    @CsvSource(
-        "lowerCamelCase, lowerCamelCase",
-        "upperCamelCase, UpperCamelCase",
+internal class CaseFormatTest {
+    @Test
+    fun toLowerCamelCase() {
+        assertEquals("", "".toLowerCamelCase()) {
+            "empty strings are returned as-is"
+        }
 
-        "lowerDashCase, lower-dash-case",
-        "upperDashCase, UPPER-DASH-CASE",
-        "titleDashCase, Title-Dash-Case",
-        "lowerMixedDashCase, lower-mixed-dashCase",
-        "upperMixedDashCase, upper-mixed-DashCase",
+        assertEquals("lowerCamelCase", "lowerCamelCase".toLowerCamelCase()) {
+            "a string that is already in `lowerCamelCase` is unchanged"
+        }
 
-        "lowerDotCase, lower.dot.case",
-        "upperDotCase, UPPER.DOT.CASE",
-        "titleDotCase, Title.Dot.Case",
-        "lowerMixedDotCase, lower.mixed.dotCase",
-        "upperMixedDotCase, upper.mixed.DotCase",
+        assertEquals("upperCamelCase", "UpperCamelCase".toLowerCamelCase()) {
+            "a string that is in `UpperCamelCase` has its first character decapitalized"
+        }
 
-        "lowerSnakeCase, lower_snake_case",
-        "upperSnakeCase, UPPER_SNAKE_CASE",
-        "titleSnakeCase, Title_Snake_Case",
-        "lowerMixedSnakeCase, lower_mixed_snakeCase",
-        "upperMixedSnakeCase, upper_mixed_SnakeCase",
+        listOf(' ', '-', '_').forEach { sep ->
+            assertEquals("lowerCamelCase", "lower${sep}camel${sep}case".toLowerCamelCase()) {
+                "every symbol outside ASCII numbers 0..9 and lower letters a..z is a word separator (`$sep`)"
+            }
+        }
 
-        "javaPropertiesFileLowerName, java.propertiesFile.lowerName",
-        "javaPropertiesFileUpperName, java.propertiesFile.UpperName",
+        assertEquals("uniCode", "©®UNI¤CODE®©".toLowerCamelCase()) {
+            "Unicode characters are removed"
+        }
 
-        "uniCode, ©®UNI¤CODE®©",
-        "uniCode, ©®uni¤code®©"
-    )
-    fun toLowerCamelCase(expected: String, input: String) {
-        assertEquals(expected, input.toLowerCamelCase(), input)
+        assertEquals("java.properties.keyName", "JAVA.Properties.Key-Name".toLowerCamelCase('.')) {
+            "ignored characters are included in the result verbatim but still considered to be word separators"
+        }
+
+        assertEquals("a.b-c_d", "a.b-c_d".toLowerCamelCase('.', '-', '_')) {
+            "it is possible to ignore multiple characters"
+        }
+
+        assertEquals("weirDlYMiXedCaSing", "WeirDlY-MiXed_CaSing".toLowerCamelCase()) {
+            "weirdly case formatted strings will lead to weird results"
+        }
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "lower|camel|case, lowerCamelCase, |",
-        "upper|camel|case, UpperCamelCase, |",
+    @Test
+    fun toUpperCamelCase() {
+        assertEquals("", "".toUpperCamelCase()) {
+            "empty strings are returned as-is"
+        }
 
-        "lower|dash|case, lower-dash-case, |",
-        "upper|dash|case, UPPER-DASH-CASE, |",
-        "title|dash|case, Title-Dash-Case, |",
-        "lower|mixed|dash|case, lower-mixed-dashCase, |",
-        "upper|mixed|dash|case, upper-mixed-DashCase, |",
+        assertEquals("UpperCamelCase", "UpperCamelCase".toUpperCamelCase()) {
+            "a string that is already in `UpperCamelCase` is unchanged"
+        }
 
-        "lower|dot|case, lower.dot.case, |",
-        "upper|dot|case, UPPER.DOT.CASE, |",
-        "title|dot|case, Title.Dot.Case, |",
-        "lower|mixed|dot|case, lower.mixed.dotCase, |",
-        "upper|mixed|dot|case, upper.mixed.DotCase, |",
+        assertEquals("LowerCamelCase", "lowerCamelCase".toUpperCamelCase()) {
+            "a string that is in `lowerCamelCase` has its first character capitalized"
+        }
 
-        "lower|snake|case, lower_snake_case, |",
-        "upper|snake|case, UPPER_SNAKE_CASE, |",
-        "title|snake|case, Title_Snake_Case, |",
-        "lower|mixed|snake|case, lower_mixed_snakeCase, |",
-        "upper|mixed|snake|case, upper_mixed_SnakeCase, |",
+        listOf(' ', '-', '_').forEach { sep ->
+            assertEquals("UpperCamelCase", "upper${sep}camel${sep}case".toUpperCamelCase()) {
+                "every symbol outside ASCII numbers 0..9 and lower letters a..z is a word separator (`$sep`)"
+            }
+        }
 
-        "java|properties|file|lower|name, java.propertiesFile.lowerName, |",
-        "java|properties|file|upper|name, java.propertiesFile.UpperName, |",
+        assertEquals("UniCode", "©®UNI¤CODE®©".toUpperCamelCase()) {
+            "Unicode characters are removed"
+        }
 
-        "||uni|code||, ©®UNI¤CODE®©, |",
-        "||uni|code||, ©®uni¤code®©, |"
-    )
-    fun toLowerCaseFormat(expected: String, input: String, separator: Char) {
-        assertEquals(expected, input.toLowerCaseFormat(separator), input)
+        assertEquals("Java.Properties.KeyName", "JAVA.Properties.Key-Name".toUpperCamelCase('.')) {
+            "ignored characters are included in the result verbatim but still considered to be word separators"
+        }
+
+        assertEquals("A.B-C_D", "a.b-c_d".toUpperCamelCase('.', '-', '_')) {
+            "it is possible to ignore multiple characters"
+        }
+
+        assertEquals("WeirDlYMiXedCaSing", "WeirDlY-MiXed_CaSing".toUpperCamelCase()) {
+            "weirdly case formatted strings will lead to weird results"
+        }
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "lower-camel-case, lowerCamelCase",
-        "upper-camel-case, UpperCamelCase",
+    @Test
+    fun toLowerCaseFormat() {
+        assertEquals("", "".toLowerCaseFormat('|')) {
+            "empty strings are returned as-is"
+        }
 
-        "lower-dash-case, lower-dash-case",
-        "upper-dash-case, UPPER-DASH-CASE",
-        "title-dash-case, Title-Dash-Case",
-        "lower-mixed-dash-case, lower-mixed-dashCase",
-        "upper-mixed-dash-case, upper-mixed-DashCase",
+        assertEquals("lower|case|format", "lower|case|format".toLowerCaseFormat('|')) {
+            "a string that is already in its desired form is unchanged"
+        }
 
-        "lower-dot-case, lower.dot.case",
-        "upper-dot-case, UPPER.DOT.CASE",
-        "title-dot-case, Title.Dot.Case",
-        "lower-mixed-dot-case, lower.mixed.dotCase",
-        "upper-mixed-dot-case, upper.mixed.DotCase",
+        assertEquals("lower|case|format", "LOWER|CASE|FORMAT".toLowerCaseFormat('|')) {
+            "a string that is all upper is properly converted to lower (non locale aware)"
+        }
 
-        "lower-snake-case, lower_snake_case",
-        "upper-snake-case, UPPER_SNAKE_CASE",
-        "title-snake-case, Title_Snake_Case",
-        "lower-mixed-snake-case, lower_mixed_snakeCase",
-        "upper-mixed-snake-case, upper_mixed_SnakeCase",
+        assertEquals("lower|case|format", "LowerCaseFormat".toLowerCaseFormat('|')) {
+            "ASCII upper letters A..Z are word separators"
+        }
 
-        "java-properties-file-lower-name, java.propertiesFile.lowerName",
-        "java-properties-file-upper-name, java.propertiesFile.UpperName",
+        listOf(' ', '-', '_').forEach { sep ->
+            assertEquals("lower|case|format", "lower${sep}case${sep}format".toLowerCaseFormat('|')) {
+                "every symbol outside ASCII numbers 0..9 and lower letters a..z is a word separator (`$sep`)"
+            }
+        }
 
-        "--uni-code--, ©®UNI¤CODE®©",
-        "--uni-code--, ©®uni¤code®©"
-    )
-    fun toLowerDashCase(expected: String, input: String) {
-        assertEquals(expected, input.toLowerDashCase(), input)
+        assertEquals("||uni|code||", "©®UNI¤CODE®©".toLowerCaseFormat('|')) {
+            "Unicode characters are replaced"
+        }
+
+        assertEquals("dot.separated.string", "dot.separated.string".toLowerCaseFormat('|', '.')) {
+            "ignored characters are included in the result verbatim"
+        }
+
+        assertEquals("a.b-c_d", "a.b-c_d".toLowerCaseFormat('|', '.', '-', '_')) {
+            "it is possible to ignore multiple characters"
+        }
+
+        assertEquals("weir|dl|y|mi|xed|ca|sing", "WeirDlY-MiXed_CaSing".toLowerCaseFormat('|')) {
+            "weirdly case formatted strings will lead to weird results"
+        }
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "lower.camel.case, lowerCamelCase",
-        "upper.camel.case, UpperCamelCase",
-
-        "lower.dash.case, lower-dash-case",
-        "upper.dash.case, UPPER-DASH-CASE",
-        "title.dash.case, Title-Dash-Case",
-        "lower.mixed.dash.case, lower-mixed-dashCase",
-        "upper.mixed.dash.case, upper-mixed-DashCase",
-
-        "lower.dot.case, lower.dot.case",
-        "upper.dot.case, UPPER.DOT.CASE",
-        "title.dot.case, Title.Dot.Case",
-        "lower.mixed.dot.case, lower.mixed.dotCase",
-        "upper.mixed.dot.case, upper.mixed.DotCase",
-
-        "lower.snake.case, lower_snake_case",
-        "upper.snake.case, UPPER_SNAKE_CASE",
-        "title.snake.case, Title_Snake_Case",
-        "lower.mixed.snake.case, lower_mixed_snakeCase",
-        "upper.mixed.snake.case, upper_mixed_SnakeCase",
-
-        "java.properties.file.lower.name, java.propertiesFile.lowerName",
-        "java.properties.file.upper.name, java.propertiesFile.UpperName",
-
-        "..uni.code.., ©®UNI¤CODE®©",
-        "..uni.code.., ©®uni¤code®©"
-    )
-    fun toLowerDotCase(expected: String, input: String) {
-        assertEquals(expected, input.toLowerDotCase(), input)
+    @Test
+    fun toLowerDashCase() {
+        assertEquals("", "".toLowerDashCase()) {
+            "empty strings are returned as-is"
+        }
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "lower_camel_case, lowerCamelCase",
-        "upper_camel_case, UpperCamelCase",
-
-        "lower_dash_case, lower-dash-case",
-        "upper_dash_case, UPPER-DASH-CASE",
-        "title_dash_case, Title-Dash-Case",
-        "lower_mixed_dash_case, lower-mixed-dashCase",
-        "upper_mixed_dash_case, upper-mixed-DashCase",
-
-        "lower_dot_case, lower.dot.case",
-        "upper_dot_case, UPPER.DOT.CASE",
-        "title_dot_case, Title.Dot.Case",
-        "lower_mixed_dot_case, lower.mixed.dotCase",
-        "upper_mixed_dot_case, upper.mixed.DotCase",
-
-        "lower_snake_case, lower_snake_case",
-        "upper_snake_case, UPPER_SNAKE_CASE",
-        "title_snake_case, Title_Snake_Case",
-        "lower_mixed_snake_case, lower_mixed_snakeCase",
-        "upper_mixed_snake_case, upper_mixed_SnakeCase",
-
-        "java_properties_file_lower_name, java.propertiesFile.lowerName",
-        "java_properties_file_upper_name, java.propertiesFile.UpperName",
-
-        "__uni_code__, ©®UNI¤CODE®©",
-        "__uni_code__, ©®uni¤code®©"
-    )
-    fun toLowerSnakeCase(expected: String, input: String) {
-        assertEquals(expected, input.toLowerSnakeCase(), input)
-    }
-    @ParameterizedTest
-    @CsvSource(
-        "LowerCamelCase, lowerCamelCase",
-        "UpperCamelCase, UpperCamelCase",
-
-        "LowerDashCase, lower-dash-case",
-        "UpperDashCase, UPPER-DASH-CASE",
-        "TitleDashCase, Title-Dash-Case",
-        "LowerMixedDashCase, lower-mixed-dashCase",
-        "UpperMixedDashCase, upper-mixed-DashCase",
-
-        "LowerDotCase, lower.dot.case",
-        "UpperDotCase, UPPER.DOT.CASE",
-        "TitleDotCase, Title.Dot.Case",
-        "LowerMixedDotCase, lower.mixed.dotCase",
-        "UpperMixedDotCase, upper.mixed.DotCase",
-
-        "LowerSnakeCase, lower_snake_case",
-        "UpperSnakeCase, UPPER_SNAKE_CASE",
-        "TitleSnakeCase, Title_Snake_Case",
-        "LowerMixedSnakeCase, lower_mixed_snakeCase",
-        "UpperMixedSnakeCase, upper_mixed_SnakeCase",
-
-        "JavaPropertiesFileLowerName, java.propertiesFile.lowerName",
-        "JavaPropertiesFileUpperName, java.propertiesFile.UpperName",
-
-        "UniCode, ©®UNI¤CODE®©",
-        "UniCode, ©®uni¤code®©"
-    )
-    fun toUpperCamelCase(expected: String, input: String) {
-        assertEquals(expected, input.toUpperCamelCase(), input)
+    @Test
+    fun toLowerSnakeCase() {
+        assertEquals("", "".toLowerSnakeCase()) {
+            "empty strings are returned as-is"
+        }
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "LOWER|CAMEL|CASE, lowerCamelCase, |",
-        "UPPER|CAMEL|CASE, UpperCamelCase, |",
+    @Test
+    fun toUpperCaseFormat() {
+        assertEquals("", "".toUpperCaseFormat('|')) {
+            "empty strings are returned as-is"
+        }
 
-        "LOWER|DASH|CASE, lower-dash-case, |",
-        "UPPER|DASH|CASE, UPPER-DASH-CASE, |",
-        "TITLE|DASH|CASE, Title-Dash-Case, |",
-        "LOWER|MIXED|DASH|CASE, lower-mixed-dashCase, |",
-        "UPPER|MIXED|DASH|CASE, upper-mixed-DashCase, |",
+        assertEquals("UPPER|CASE|FORMAT", "UPPER|CASE|FORMAT".toUpperCaseFormat('|')) {
+            "a string that is already in its desired form is unchanged"
+        }
 
-        "LOWER|DOT|CASE, lower.dot.case, |",
-        "UPPER|DOT|CASE, UPPER.DOT.CASE, |",
-        "TITLE|DOT|CASE, Title.Dot.Case, |",
-        "LOWER|MIXED|DOT|CASE, lower.mixed.dotCase, |",
-        "UPPER|MIXED|DOT|CASE, upper.mixed.DotCase, |",
+        assertEquals("UPPER|CASE|FORMAT", "upper|case|format".toUpperCaseFormat('|')) {
+            "a string that is all lower is properly converted to upper (non locale aware)"
+        }
 
-        "LOWER|SNAKE|CASE, lower_snake_case, |",
-        "UPPER|SNAKE|CASE, UPPER_SNAKE_CASE, |",
-        "TITLE|SNAKE|CASE, Title_Snake_Case, |",
-        "LOWER|MIXED|SNAKE|CASE, lower_mixed_snakeCase, |",
-        "UPPER|MIXED|SNAKE|CASE, upper_mixed_SnakeCase, |",
+        assertEquals("UPPER|CASE|FORMAT", "UpperCaseFormat".toUpperCaseFormat('|')) {
+            "ASCII upper letters A..Z are word separators"
+        }
 
-        "JAVA|PROPERTIES|FILE|LOWER|NAME, java.propertiesFile.lowerName, |",
-        "JAVA|PROPERTIES|FILE|UPPER|NAME, java.propertiesFile.UpperName, |",
+        listOf(' ', '-', '_').forEach { sep ->
+            assertEquals("UPPER|CASE|FORMAT", "upper${sep}case${sep}format".toUpperCaseFormat('|')) {
+                "every symbol outside ASCII numbers 0..9 and lower letters a..z is a word separator (`$sep`)"
+            }
+        }
 
-        "||UNI|CODE||, ©®UNI¤CODE®©, |",
-        "||UNI|CODE||, ©®uni¤code®©, |"
-    )
-    fun toUpperCaseFormat(expected: String, input: String, separator: Char) {
-        assertEquals(expected, input.toUpperCaseFormat(separator), input)
+        assertEquals("||UNI|CODE||", "©®UNI¤CODE®©".toUpperCaseFormat('|')) {
+            "Unicode characters are replaced"
+        }
+
+        assertEquals("DOT.SEPARATED.STRING", "dot.separated.string".toUpperCaseFormat('|', '.')) {
+            "ignored characters are included in the result verbatim"
+        }
+
+        assertEquals("A.B-C_D", "a.b-c_d".toUpperCaseFormat('|', '.', '-', '_')) {
+            "it is possible to ignore multiple characters"
+        }
+
+        assertEquals("WEIR|DL|Y|MI|XED|CA|SING", "WeirDlY-MiXed_CaSing".toUpperCaseFormat('|')) {
+            "weirdly case formatted strings will lead to weird results"
+        }
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "LOWER-CAMEL-CASE, lowerCamelCase",
-        "UPPER-CAMEL-CASE, UpperCamelCase",
-
-        "LOWER-DASH-CASE, lower-dash-case",
-        "UPPER-DASH-CASE, UPPER-DASH-CASE",
-        "TITLE-DASH-CASE, Title-Dash-Case",
-        "LOWER-MIXED-DASH-CASE, lower-mixed-dashCase",
-        "UPPER-MIXED-DASH-CASE, upper-mixed-DashCase",
-
-        "LOWER-DOT-CASE, lower.dot.case",
-        "UPPER-DOT-CASE, UPPER.DOT.CASE",
-        "TITLE-DOT-CASE, Title.Dot.Case",
-        "LOWER-MIXED-DOT-CASE, lower.mixed.dotCase",
-        "UPPER-MIXED-DOT-CASE, upper.mixed.DotCase",
-
-        "LOWER-SNAKE-CASE, lower_snake_case",
-        "UPPER-SNAKE-CASE, UPPER_SNAKE_CASE",
-        "TITLE-SNAKE-CASE, Title_Snake_Case",
-        "LOWER-MIXED-SNAKE-CASE, lower_mixed_snakeCase",
-        "UPPER-MIXED-SNAKE-CASE, upper_mixed_SnakeCase",
-
-        "JAVA-PROPERTIES-FILE-LOWER-NAME, java.propertiesFile.lowerName",
-        "JAVA-PROPERTIES-FILE-UPPER-NAME, java.propertiesFile.UpperName",
-
-        "--UNI-CODE--, ©®UNI¤CODE®©",
-        "--UNI-CODE--, ©®uni¤code®©"
-    )
-    fun toUpperDashCase(expected: String, input: String) {
-        assertEquals(expected, input.toUpperDashCase(), input)
+    @Test
+    fun toUpperDashCase() {
+        assertEquals("", "".toUpperDashCase()) {
+            "empty strings are returned as-is"
+        }
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "LOWER.CAMEL.CASE, lowerCamelCase",
-        "UPPER.CAMEL.CASE, UpperCamelCase",
-
-        "LOWER.DASH.CASE, lower-dash-case",
-        "UPPER.DASH.CASE, UPPER-DASH-CASE",
-        "TITLE.DASH.CASE, Title-Dash-Case",
-        "LOWER.MIXED.DASH.CASE, lower-mixed-dashCase",
-        "UPPER.MIXED.DASH.CASE, upper-mixed-DashCase",
-
-        "LOWER.DOT.CASE, lower.dot.case",
-        "UPPER.DOT.CASE, UPPER.DOT.CASE",
-        "TITLE.DOT.CASE, Title.Dot.Case",
-        "LOWER.MIXED.DOT.CASE, lower.mixed.dotCase",
-        "UPPER.MIXED.DOT.CASE, upper.mixed.DotCase",
-
-        "LOWER.SNAKE.CASE, lower_snake_case",
-        "UPPER.SNAKE.CASE, UPPER_SNAKE_CASE",
-        "TITLE.SNAKE.CASE, Title_Snake_Case",
-        "LOWER.MIXED.SNAKE.CASE, lower_mixed_snakeCase",
-        "UPPER.MIXED.SNAKE.CASE, upper_mixed_SnakeCase",
-
-        "JAVA.PROPERTIES.FILE.LOWER.NAME, java.propertiesFile.lowerName",
-        "JAVA.PROPERTIES.FILE.UPPER.NAME, java.propertiesFile.UpperName",
-
-        "..UNI.CODE.., ©®UNI¤CODE®©",
-        "..UNI.CODE.., ©®uni¤code®©"
-    )
-    fun toUpperDotCase(expected: String, input: String) {
-        assertEquals(expected, input.toUpperDotCase(), input)
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-        "LOWER_CAMEL_CASE, lowerCamelCase",
-        "UPPER_CAMEL_CASE, UpperCamelCase",
-
-        "LOWER_DASH_CASE, lower-dash-case",
-        "UPPER_DASH_CASE, UPPER-DASH-CASE",
-        "TITLE_DASH_CASE, Title-Dash-Case",
-        "LOWER_MIXED_DASH_CASE, lower-mixed-dashCase",
-        "UPPER_MIXED_DASH_CASE, upper-mixed-DashCase",
-
-        "LOWER_DOT_CASE, lower.dot.case",
-        "UPPER_DOT_CASE, UPPER.DOT.CASE",
-        "TITLE_DOT_CASE, Title.Dot.Case",
-        "LOWER_MIXED_DOT_CASE, lower.mixed.dotCase",
-        "UPPER_MIXED_DOT_CASE, upper.mixed.DotCase",
-
-        "LOWER_SNAKE_CASE, lower_snake_case",
-        "UPPER_SNAKE_CASE, UPPER_SNAKE_CASE",
-        "TITLE_SNAKE_CASE, Title_Snake_Case",
-        "LOWER_MIXED_SNAKE_CASE, lower_mixed_snakeCase",
-        "UPPER_MIXED_SNAKE_CASE, upper_mixed_SnakeCase",
-
-        "JAVA_PROPERTIES_FILE_LOWER_NAME, java.propertiesFile.lowerName",
-        "JAVA_PROPERTIES_FILE_UPPER_NAME, java.propertiesFile.UpperName",
-
-        "__UNI_CODE__, ©®UNI¤CODE®©",
-        "__UNI_CODE__, ©®uni¤code®©"
-    )
-    fun toUpperSnakeCase(expected: String, input: String) {
-        assertEquals(expected, input.toUpperSnakeCase(), input)
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-        "loremIpsum.dolorSit.amet.consecteturAdipiscing, lorem-ipsum.dolor-sit.amet.consectetur-adipiscing, .",
-        "loremIpsum.dolorSit.amet.consecteturAdipiscing, lorem_ipsum.dolor_sit.amet.consectetur_adipiscing, .",
-        "loremIpsum.dolorSit.amet.consecteturAdipiscing, LOREM-IPSUM.DOLOR-SIT.AMET.CONSECTETUR-ADIPISCING, .",
-        "loremIpsum.dolorSit.amet.consecteturAdipiscing, LOREM_IPSUM.DOLOR_SIT.AMET.CONSECTETUR_ADIPISCING, ."
-    )
-    fun `ignored chars are included as is in result`(expected: String, input: String, ignore: Char) {
-        assertEquals(expected, input.toLowerCamelCase(ignore), input)
+    @Test
+    fun toUpperSnakeCase() {
+        assertEquals("", "".toUpperSnakeCase()) {
+            "empty strings are returned as-is"
+        }
     }
 }
