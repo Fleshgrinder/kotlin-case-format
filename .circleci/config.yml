@@ -4,9 +4,6 @@ jobs:
     docker:
       - image: gradle:jdk8
     working_directory: ~/project
-    environment:
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
     steps:
       - checkout
       - restore_cache:
@@ -19,3 +16,7 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle.kts" }}
       - run: gradle check
+
+# TODO react to master merges and automatically generate docs (push with `[skip ci]`)
+# TODO react to tags and automatically publish
+# TODO react to tags and create GitHub release

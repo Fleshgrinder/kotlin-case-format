@@ -1,10 +1,6 @@
-import org.intellij.lang.annotations.Language
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.dokka.gradle.LinkMapping
-import org.jetbrains.dokka.gradle.PackageOptions
-import org.jetbrains.dokka.DokkaConfiguration.ExternalDocumentationLink
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URL
 
 plugins {
     `java-library`
@@ -15,16 +11,17 @@ plugins {
 }
 
 description = "String extension functions to convert between various case formats (camelCase, dash-case, …)"
-group = "com.fleshgrinder.extensions.kotlin"
+group = "com.fleshgrinder.kotlin"
 version = "1.0.0"
 
-fun v(propertyName: String): String =
-    project.property(propertyName).toString()
+fun env(propertyName: String): String? = System.getenv(propertyName.replace('.', '_').toUpperCase())
+fun config(name: String): String = env(name) ?: project.property(name) as String
+fun configOrNull(name: String): String? = env(name) ?: project.findProperty(name) as String?
 
 dependencies {
-    implementation(kotlin("stdlib"))
+    api(kotlin("stdlib", "[1.0,)"))
 
-    val junitVersion = v("org.junit.jupiter.version")
+    val junitVersion = config("org.junit.jupiter.version")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
@@ -95,7 +92,7 @@ tasks.withType<Test> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = v("org.gradle.version")
+    gradleVersion = config("org.gradle.version")
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -115,11 +112,24 @@ val javadocJar by tasks.registering(Jar::class) {
 
 publishing {
     repositories {
-        //mavenCentral()
-        maven(uri("$buildDir/repository"))
+        val user = configOrNull("com.bintray.user")
+        val key = configOrNull("com.bintray.key")
+
+        if (user == null && key == null) {
+            maven(uri("$buildDir/local-maven-repository"))
+        } else {
+            maven(uri("https://api.bintray.com/maven/$user/$group/$name/;publish=1")) {
+                name = "bintray"
+                credentials {
+                    username = user
+                    password = key
+                }
+            }
+        }
     }
+
     publications {
-        register("mavenJava", MavenPublication::class.java) {
+        register("mavenJava", MavenPublication::class) {
             from(components["java"])
             artifact(sourcesJar.get())
             artifact(javadocJar.get())
