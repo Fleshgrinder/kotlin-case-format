@@ -9,27 +9,20 @@ various case formats (_camelCase_, _dash-case_, …).
 
 ## Installing
 
-The module is available from both [JCenter] and [Maven Central].
+The module is available from [Bintray] only. It will become available via 
+JCenter and Maven Central once 1.0.0 is out.
 
 ### Gradle
 
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("com.fleshgrinder.kotlin:case-format:1.0.0")
+    implementation("com.fleshgrinder.kotlin:case-format:0.1.0")
 }
-```
 
-### Maven
-
-```xml
-<!-- pom.xml -->
-<dependency>
-    <groupId>com.fleshgrinder.kotlin</groupId>
-    <artifactId>case-format</artifactId>
-    <version>1.0.0</version>
-    <type>pom</type>
-</dependency>
+repositories {
+    maven("https://dl.bintray.com/fleshgrinder/com.fleshgrinder.kotlin")
+}
 ```
 
 ## Usage
@@ -49,8 +42,7 @@ Please refer to the [module documentation] for usage information and examples.
 
 Utility functions that extend Kotlin’s standard library.
 
-[JCenter]: https://bintray.com/fleshgrinder/com.fleshgrinder.kotlin/case-format
-[Maven Central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.fleshgrinder%22%20AND%20a%3A%22kotlin-case-format%22
+[Bintray]: https://bintray.com/fleshgrinder/com.fleshgrinder.kotlin/case-format
 [module documentation]: https://fleshgrinder.github.io/kotlin-case-format/com.fleshgrinder.extensions.kotlin/kotlin.-string/index.html
 [Semantic Versioning]: http://semver.org/
 [Keep a Changelog]: https://keepachangelog.com/

@@ -19,21 +19,17 @@ various case formats (<em>camelCase</em>, <em>dash-case</em>, …).</p>
 <li><a href="#project-info">Project Info</a></li>
 </ul>
 <h2>Installing</h2>
-<p>The module is available from both <a href="https://bintray.com/fleshgrinder/com.fleshgrinder.kotlin/case-format">JCenter</a> and <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.fleshgrinder%22%20AND%20a%3A%22kotlin-case-format%22">Maven Central</a>.</p>
+<p>The module is available from <a href="https://bintray.com/fleshgrinder/com.fleshgrinder.kotlin/case-format">Bintray</a> only. It will become available via 
+JCenter and Maven Central once 1.0.0 is out.</p>
 <h3>Gradle</h3>
 <pre><code class="lang-kotlin">// build.gradle.kts
 dependencies {
-    implementation("com.fleshgrinder.kotlin:case-format:1.0.0")
+    implementation("com.fleshgrinder.kotlin:case-format:0.1.0")
 }
-</code></pre>
-<h3>Maven</h3>
-<pre><code class="lang-xml">&lt;!-- pom.xml --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;com.fleshgrinder.kotlin&lt;/groupId&gt;
-    &lt;artifactId&gt;case-format&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0&lt;/version&gt;
-    &lt;type&gt;pom&lt;/type&gt;
-&lt;/dependency&gt;
+
+repositories {
+    maven("https://dl.bintray.com/fleshgrinder/com.fleshgrinder.kotlin")
+}
 </code></pre>
 <h2>Usage</h2>
 <p>Please refer to the <a href="https://fleshgrinder.github.io/kotlin-case-format/com.fleshgrinder.extensions.kotlin/kotlin.-string/index.html">module documentation</a> for usage information and examples.</p>
