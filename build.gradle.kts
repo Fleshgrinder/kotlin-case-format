@@ -11,9 +11,10 @@ plugins {
     `maven-publish`
     kotlin("jvm") version "1.2.71"
     id("org.jetbrains.dokka") version "0.9.17"
+    id("org.jlleitschuh.gradle.ktlint") version "6.2.0"
 }
 
-description = "Utility functions to convert between various case formats."
+description = "String extension functions to convert between various case formats (camelCase, dash-case, …)"
 group = "com.fleshgrinder.extensions.kotlin"
 version = "1.0.0"
 
