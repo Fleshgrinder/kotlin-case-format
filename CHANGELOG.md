@@ -7,4 +7,8 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Fleshgrinder/kotlin-kafka-proto-serde/compare
+## 0.1.0 - 2018-10-24
+### Added
+- initial release
+
+[Unreleased]: https://github.com/Fleshgrinder/kotlin-case-format/compare/0.1.0...HEAD

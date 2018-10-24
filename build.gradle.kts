@@ -12,7 +12,7 @@ plugins {
 
 description = "String extension functions to convert between various case formats (camelCase, dash-case, …)"
 group = "com.fleshgrinder.kotlin"
-version = "1.0.0"
+version = "0.1.0"
 
 fun env(propertyName: String): String? = System.getenv(propertyName.replace('.', '_').toUpperCase())
 fun config(name: String): String = env(name) ?: project.property(name) as String
