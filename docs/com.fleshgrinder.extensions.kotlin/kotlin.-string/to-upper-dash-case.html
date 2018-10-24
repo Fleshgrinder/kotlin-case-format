@@ -19,6 +19,36 @@
 <em>upper kebab case</em>, …)</p>
 <pre><code class="lang-kotlin">assertEquals("", "".toUpperDashCase()) {
     "empty strings are returned as-is"
+}
+
+assertEquals("UPPER-DASH-CASE", "UPPER-DASH-CASE".toUpperDashCase()) {
+    "a string that is already in its desired form is unchanged"
+}
+
+assertEquals("UPPER-DASH-CASE", "upper-dash-case".toUpperDashCase()) {
+    "a string that is all lower is properly converted to upper"
+}
+
+listOf(' ', '|', '_').forEach { sep -&gt;
+    assertEquals("UPPER-DASH-CASE", "upper${sep}dash${sep}case".toUpperDashCase()) {
+        "every symbol outside ASCII numbers 0..9 and upper letters a..z is a word separator (`$sep`)"
+    }
+}
+
+assertEquals("--UNI-CODE--", "©®UNI¤CODE®©".toUpperDashCase()) {
+    "Unicode characters are replaced"
+}
+
+assertEquals("DOT.SEPARATED.STRING", "dot.separated.string".toUpperDashCase('.')) {
+    "ignored characters are included in the result verbatim"
+}
+
+assertEquals("A.B|C_D", "a.b|c_d".toUpperDashCase('.', '|', '_')) {
+    "it is possible to ignore multiple characters"
+}
+
+assertEquals("WEIR-DL-Y-MI-XED-CA-SING", "WeirDlY-MiXed_CaSing".toUpperDashCase()) {
+    "weirdly case formatted strings will lead to weird results"
 }</code></pre>
 <h3>Parameters</h3>
 <p><a name="ignore"></a>

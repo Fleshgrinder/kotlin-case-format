@@ -18,6 +18,36 @@
 <p>Format this <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> in <strong>lower&#95;snake&#95;case</strong></p>
 <pre><code class="lang-kotlin">assertEquals("", "".toLowerSnakeCase()) {
     "empty strings are returned as-is"
+}
+
+assertEquals("lower_snake_case", "lower_snake_case".toLowerSnakeCase()) {
+    "a string that is already in its desired form is unchanged"
+}
+
+assertEquals("lower_snake_case", "LOWER_SNAKE_CASE".toLowerSnakeCase()) {
+    "a string that is all upper is properly converted to lower"
+}
+
+listOf(' ', '-', '|').forEach { sep -&gt;
+    assertEquals("lower_snake_case", "lower${sep}snake${sep}case".toLowerSnakeCase()) {
+        "every symbol outside ASCII numbers 0..9 and lower letters a..z is a word separator (`$sep`)"
+    }
+}
+
+assertEquals("__uni_code__", "©®UNI¤CODE®©".toLowerSnakeCase()) {
+    "Unicode characters are replaced"
+}
+
+assertEquals("dot.separated.string", "dot.separated.string".toLowerSnakeCase('.')) {
+    "ignored characters are included in the result verbatim"
+}
+
+assertEquals("a.b-c|d", "a.b-c|d".toLowerSnakeCase('.', '-', '|')) {
+    "it is possible to ignore multiple characters"
+}
+
+assertEquals("weir_dl_y_mi_xed_ca_sing", "WeirDlY_MiXed_CaSing".toLowerSnakeCase()) {
+    "weirdly case formatted strings will lead to weird results"
 }</code></pre>
 <h3>Parameters</h3>
 <p><a name="ignore"></a>

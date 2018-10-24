@@ -18,6 +18,36 @@
 <p>Format this <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> in <strong>UPPER&#95;SNAKE&#95;CASE</strong> (aka. <em>screaming snake case</em>)</p>
 <pre><code class="lang-kotlin">assertEquals("", "".toUpperSnakeCase()) {
     "empty strings are returned as-is"
+}
+
+assertEquals("UPPER_SNAKE_CASE", "UPPER_SNAKE_CASE".toUpperSnakeCase()) {
+    "a string that is already in its desired form is unchanged"
+}
+
+assertEquals("UPPER_SNAKE_CASE", "upper_snake_case".toUpperSnakeCase()) {
+    "a string that is all lower is properly converted to upper"
+}
+
+listOf(' ', '-', '|').forEach { sep -&gt;
+    assertEquals("UPPER_SNAKE_CASE", "upper${sep}snake${sep}case".toUpperSnakeCase()) {
+        "every symbol outside ASCII numbers 0..9 and upper letters a..z is a word separator (`$sep`)"
+    }
+}
+
+assertEquals("__UNI_CODE__", "©®UNI¤CODE®©".toUpperSnakeCase()) {
+    "Unicode characters are replaced"
+}
+
+assertEquals("DOT.SEPARATED.STRING", "dot.separated.string".toUpperSnakeCase('.')) {
+    "ignored characters are included in the result verbatim"
+}
+
+assertEquals("A.B-C|D", "a.b-c|d".toUpperSnakeCase('.', '-', '|')) {
+    "it is possible to ignore multiple characters"
+}
+
+assertEquals("WEIR_DL_Y_MI_XED_CA_SING", "WeirDlY_MiXed_CaSing".toUpperSnakeCase()) {
+    "weirdly case formatted strings will lead to weird results"
 }</code></pre>
 <h3>Parameters</h3>
 <p><a name="ignore"></a>
