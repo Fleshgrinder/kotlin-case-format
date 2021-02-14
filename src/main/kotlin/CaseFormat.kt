@@ -1,5 +1,3 @@
-@file:Suppress("RedundantVisibilityModifier")
-
 package com.fleshgrinder.extensions.kotlin
 
 private fun formatCamelCase(input: String, ignore: CharArray, upperCase: Boolean) =
@@ -39,26 +37,27 @@ private fun formatCamelCase(input: String, ignore: CharArray, upperCase: Boolean
 
 /**
  * Format this [String] in **lowerCamelCase** (aka. _mixedCase_,
- * _Smalltalk case_, …)
+ * _Smalltalk case_, …).
  *
  * @param ignore can be used to specify characters that should be included
- *   verbatim in the result, note that they are still considered separators.
+ *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **lowerCamelCase** formatted [String]
- * @since 1.0.0
+ * @since 0.1.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toLowerCamelCase
  */
 public fun String.toLowerCamelCase(vararg ignore: Char): String =
     formatCamelCase(this, ignore, false)
 
 /**
- * Format this [String] in **UpperCamelCase** (aka. _PascalCase_, _WikiCase_, …)
+ * Format this [String] in **UpperCamelCase** (aka. _PascalCase_, _WikiCase_,
+ * …).
  *
  * @param ignore can be used to specify characters that should be included
- *   verbatim in the result, note that they are still considered separators.
+ *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **UpperCamelCase** formatted [String]
- * @since 1.0.0
+ * @since 0.1.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toUpperCamelCase
  */
 public fun String.toUpperCamelCase(vararg ignore: Char): String =
@@ -110,37 +109,37 @@ private fun formatLowerCase(input: String, separator: Char, ignore: CharArray) =
  *
  * @param separator to separate words with
  * @param ignore can be used to specify characters that should be included
- *   verbatim in the result, note that they are still considered separators.
+ *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **lower case** formatted [String]
- * @since 1.0.0
+ * @since 0.1.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toLowerCaseFormat
  */
-public fun String.toLowerCaseFormat(separator: Char, vararg ignore: Char) =
+public fun String.toLowerCaseFormat(separator: Char, vararg ignore: Char): String =
     formatLowerCase(this, separator, ignore)
 
 /**
  * Format this [String] in **lower-dash-case** (aka. _lower hyphen case_,
- * _lower kebab case_, …)
+ * _lower kebab case_, …).
  *
  * @param ignore can be used to specify characters that should be included
- *   verbatim in the result, note that they are still considered separators.
+ *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **lower-dash-case** formatted [String]
- * @since 1.0.0
+ * @since 0.1.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toLowerDashCase
  */
 public fun String.toLowerDashCase(vararg ignore: Char): String =
     formatLowerCase(this, '-', ignore)
 
 /**
- * Format this [String] in **lower&#95;snake&#95;case**
+ * Format this [String] in **lower_snake_case**.
  *
  * @param ignore can be used to specify characters that should be included
- *   verbatim in the result, note that they are still considered separators.
+ *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
- * @return **lower&#95;snake&#95;case** formatted [String]
- * @since 1.0.0
+ * @return **lower_snake_case** formatted [String]
+ * @since 0.1.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toLowerSnakeCase
  */
 public fun String.toLowerSnakeCase(vararg ignore: Char): String =
@@ -155,37 +154,37 @@ private fun formatUpperCase(input: String, separator: Char, ignore: CharArray) =
  *
  * @param separator to separate words with
  * @param ignore can be used to specify characters that should be included
- *   verbatim in the result, note that they are still considered separators.
+ *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **UPPER CASE** formatted [String]
- * @since 1.0.0
+ * @since 0.1.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toUpperCaseFormat
  */
-public fun String.toUpperCaseFormat(separator: Char, vararg ignore: Char) =
+public fun String.toUpperCaseFormat(separator: Char, vararg ignore: Char): String =
     formatUpperCase(this, separator, ignore)
 
 /**
  * Format this [String] in **UPPER-DASH-CASE** (aka. _upper hyphen case_,
- * _upper kebab case_, …)
+ * _upper kebab case_, …).
  *
  * @param ignore can be used to specify characters that should be included
- *   verbatim in the result, note that they are still considered separators.
+ *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **UPPER-DASH-CASE** formatted [String]
- * @since 1.0.0
+ * @since 0.1.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toUpperDashCase
  */
 public fun String.toUpperDashCase(vararg ignore: Char): String =
     formatUpperCase(this, '-', ignore)
 
 /**
- * Format this [String] in **UPPER&#95;SNAKE&#95;CASE** (aka. _screaming snake case_)
+ * Format this [String] in **UPPER_SNAKE_CASE** (aka. _screaming snake case_).
  *
  * @param ignore can be used to specify characters that should be included
- *   verbatim in the result, note that they are still considered separators.
+ *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
- * @return **UPPER&#95;SNAKE&#95;CASE** formatted [String]
- * @since 1.0.0
+ * @return **UPPER_SNAKE_CASE** formatted [String]
+ * @since 0.1.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toUpperSnakeCase
  */
 public fun String.toUpperSnakeCase(vararg ignore: Char): String =

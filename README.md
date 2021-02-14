@@ -1,50 +1,41 @@
-# Module case-format
+# Kotlin Case Format
+[![CircleCI](https://img.shields.io/circleci/build/github/Fleshgrinder/kotlin-case-format?label=CirlceCI)](https://app.circleci.com/pipelines/github/Fleshgrinder/kotlin-case-format)
+[![Maven Central](https://img.shields.io/maven-central/v/com.fleshgrinder.kotlin/case-format.svg?label=Maven%20Central)](https://search.maven.org/artifact/com.fleshgrinder.kotlin/case-format)
 
-The `case-format` module provides string extension functions to convert between
-various case formats (_camelCase_, _dash-case_, …).
+**Kotlin Case Format** provides string extension functions to convert between various case formats (_camelCase_, _
+dash-case_, _snake_case_, …).
 
-- [Installing](#installing)
-- [Usage](#usage)
-- [Project Info](#project-info)
-
-## Installing
-
-The module is available from [Bintray] only. It will become available via 
-JCenter and Maven Central once 1.0.0 is out.
-
+## Install
 ### Gradle
-
 ```kotlin
-// build.gradle.kts
 dependencies {
-    implementation("com.fleshgrinder.kotlin:case-format:0.1.0")
+    implementation("com.fleshgrinder.kotlin:case-format:0.2.0")
 }
 
 repositories {
-    maven("https://dl.bintray.com/fleshgrinder/com.fleshgrinder.kotlin")
+    mavenCentral()
 }
 ```
 
-## Usage
-
-Please refer to the [module documentation] for usage information and examples.
+### Maven
+```xml
+<dependency>
+  <groupId>com.fleshgrinder.kotlin</groupId>
+  <artifactId>case-format</artifactId>
+  <version>0.2.0</version>
+</dependency>
+```
 
 ## Project Info
+* Please read [CONTRIBUTING.md] if you want to contribute, which would be very welcome.
+* We use [Semantic Versioning] and [Keep a Changelog], available versions and changes are listed on our [releases] page.
+* This project is licensed under the [Unlicense], see [UNLICENSE.md] for details.
+* All [releases] are signed with `EBE5 EBC0 F49E 38A6 9FC7 EA26 7366 AE4A 6774 8172` ([keybase.io/fleshgrinder]).
 
-* Please read [CONTRIBUTING.md](CONTRIBUTING.md) if you want to contribute, 
-  which would be very welcome.
-* We use [Semantic Versioning] and [Keep a Changelog], available versions and
-  changes are listed on our [releases] page.
-* This module is licensed under the [Unlicense], see
-  [UNLICENSE.md](UNLICENSE.md) for details.
-
-# Package com.fleshgrinder.extensions.kotlin
-
-Utility functions that extend Kotlin’s standard library.
-
-[Bintray]: https://bintray.com/fleshgrinder/com.fleshgrinder.kotlin/case-format
-[module documentation]: https://fleshgrinder.github.io/kotlin-case-format/com.fleshgrinder.extensions.kotlin/kotlin.-string/index.html
-[Semantic Versioning]: http://semver.org/
+[CONTRIBUTING.md]: CONTRIBUTING.md
 [Keep a Changelog]: https://keepachangelog.com/
+[keybase.io/fleshgrinder]: https://keybase.io/fleshgrinder
 [releases]: https://github.com/Fleshgrinder/kotlin-case-format/releases
+[Semantic Versioning]: http://semver.org/
+[UNLICENSE.md]: UNLICENSE.md
 [Unlicense]: https://unlicense.org/

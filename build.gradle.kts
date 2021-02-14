@@ -1,138 +1,138 @@
-import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.dokka.gradle.LinkMapping
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    `java-library`
-    `maven-publish`
-    kotlin("jvm") version "1.2.71"
-    id("org.jetbrains.dokka") version "0.9.17"
-    id("org.jlleitschuh.gradle.ktlint") version "6.2.0"
-}
-
-description = "String extension functions to convert between various case formats (camelCase, dash-case, …)"
-group = "com.fleshgrinder.kotlin"
-version = "0.1.0"
-
-fun env(propertyName: String): String? = System.getenv(propertyName.replace('.', '_').toUpperCase())
-fun config(name: String): String = env(name) ?: project.property(name) as String
-fun configOrNull(name: String): String? = env(name) ?: project.findProperty(name) as String?
-
-dependencies {
-    api(kotlin("stdlib", "[1.0,)"))
-
-    val junitVersion = config("org.junit.jupiter.version")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    kotlin("jvm") version "1.4.30"
+    id("org.jetbrains.dokka") version "1.4.20"
+    signing
+    id("de.marcphilipp.nexus-publish") version "0.4.0"
+    id("io.codearte.nexus-staging") version "0.22.0"
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
+    maven("https://dl.bintray.com/jetbrains/markdown")
+    maven("https://dl.bintray.com/korlibs/korlibs")
+    maven("https://dl.bintray.com/kotlin/dokka")
+    maven("https://dl.bintray.com/kotlin/kotlinx")
 }
 
-tasks.remove(tasks["javadoc"])
+dependencies {
+    api(kotlin("stdlib", "[1.3,)"))
 
-fun DokkaTask.addLinkMapping(dir: String, url: String, suffix: String) = apply {
-    linkMappings.add(LinkMapping().apply {
-        this.dir = dir
-        this.url = url
-        this.suffix = suffix
-    })
+    val junitVersion = "5.7.1"
+    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly(platform("org.junit:junit-bom:$junitVersion"))
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
-val dokka by tasks.getting(DokkaTask::class) {
-    outputDirectory = "$buildDir/javadoc"
-    includes = listOf("README.md")
-    addLinkMapping(
-        dir = "src/main/kotlin",
-        url = "https://github.com/Fleshgrinder/kotlin-case-format/tree/master/src/main/kotlin",
-        suffix = "#L"
-    )
-    samples += "$rootDir/src/test/kotlin"
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
-val docs by tasks.registering(Copy::class) {
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Copies the Dokka generated documentation into the `/docs` directory for GitHub publishing."
-    dependsOn("cleanDocs", dokka)
-    from("${dokka.outputDirectory}/style.css")
-
-    val hljs = """
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/styles/atom-one-dark.min.css">
-    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/highlight.min.js"></script>
-    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/languages/kotlin.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    """
-
-    from("${dokka.outputDirectory}/${dokka.moduleName}") {
-        eachFile {
-            println(path)
-            filter {
-                when (path) {
-                    "package-list" -> if (it.startsWith('$')) "" else it
-                    else -> it.replace("../style.css\">", "./style.css\">$hljs")
-                }
-            }
-        }
-    }
-    into("$rootDir/docs")
+kotlin {
+    explicitApi()
 }
 
-tasks.withType<KotlinCompile> {
+tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         allWarningsAsErrors = true
+        jvmTarget = file(".java-version").readText().trim()
+        apiVersion = "1.3"
     }
 }
 
-tasks.withType<Test> {
+tasks.test {
     useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
+}
+
+tasks.dokkaJavadoc {
+    outputDirectory.set(tasks.javadoc.map { checkNotNull(it.destinationDir) })
+}
+
+tasks.javadoc {
+    dependsOn(tasks.dokkaJavadoc)
+}
+
+tasks.jar {
+    manifest {
+        attributes["Name"] = "com/fleshgrinder/extensions/kotlin/"
+        attributes["Specification-Title"] = "Kotlin Case Format"
+        attributes["Specification-Version"] = project.version
+        attributes["Specification-Vendor"] = "Fleshgrinder"
+        attributes["Implementation-Title"] = "com.fleshgrinder.extensions.kotlin"
+        attributes["Implementation-Vendor"] = "Fleshgrinder"
+        attributes["Implementation-Version"] = gitCommitId.get()
+        attributes["Sealed"] = false
     }
 }
 
-tasks.withType<Wrapper> {
-    gradleVersion = config("org.gradle.version")
-    distributionType = Wrapper.DistributionType.ALL
-}
+val gitCommitId = provider { file(".git/refs/heads/master").readText().trim() }
 
-val sourcesJar by tasks.registering(Jar::class) {
-    group = "build"
-    description = "Assembles a jar archive containing the source files."
-    classifier = "sources"
-    from(sourceSets["main"].allSource)
-}
-
-val javadocJar by tasks.registering(Jar::class) {
-    group = "build"
-    description = "Assembles a jar archive containing the source documentation."
-    classifier = "javadoc"
-    from(dokka)
+if ((version as String).endsWith("-SNAPSHOT")) {
+    gradle.startParameter.excludedTaskNames.apply {
+        add("signMavenJavaPublication")
+        add("closeAndReleaseRepository")
+    }
 }
 
 publishing {
-    repositories {
-        val user = configOrNull("com.bintray.user")
-        val key = configOrNull("com.bintray.key")
-
-        if (user == null && key == null) {
-            maven(uri("$buildDir/local-maven-repository"))
-        } else {
-            maven(uri("https://api.bintray.com/maven/$user/$group/$name/;publish=1")) {
-                name = "bintray"
-                credentials {
-                    username = user
-                    password = key
+    publications {
+        create<MavenPublication>("sonatype") {
+            from(components["java"])
+            pom {
+                name.set("Kotlin Case Format")
+                description.set(project.description)
+                url.set("https://github.com/Fleshgrinder/kotlin-case-format")
+                inceptionYear.set("2018")
+                properties.put("commit", gitCommitId)
+                licenses {
+                    license {
+                        name.set("Unlicense")
+                        url.set("https://unlicense.org/")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("Fleshgrinder")
+                        name.set("Richard Fussenegger")
+                        email.set("Fleshgrinder@users.noreply.github.com")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/Fleshgrinder/kotlin-case-format")
+                    connection.set("scm:https://github.com/Fleshgrinder/kotlin-case-format.git")
+                    developerConnection.set("scm:git@github.com:Fleshgrinder/kotlin-case-format.git")
+                }
+                issueManagement {
+                    system.set("GitHub")
+                    url.set("https://github.com/Fleshgrinder/kotlin-case-format/issues")
                 }
             }
         }
     }
+}
 
-    publications {
-        register("mavenJava", MavenPublication::class) {
-            from(components["java"])
-            artifact(sourcesJar.get())
-            artifact(javadocJar.get())
+nexusStaging {
+    packageGroup = "com.fleshgrinder"
+    stagingProfileId = "141a1dad946f"
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            // Documentation mentions that it will automatically take these
+            // values from nexusStaging but it actually does not work and
+            // :initializeSonatypeStagingRepository fails. Hence, we have to
+            // explicitly call this here.
+            username.set(project.providers.gradleProperty("nexusUsername").forUseAtConfigurationTime())
+            password.set(project.providers.gradleProperty("nexusPassword").forUseAtConfigurationTime())
         }
     }
+}
+
+signing {
+    sign(publishing.publications["sonatype"])
 }
