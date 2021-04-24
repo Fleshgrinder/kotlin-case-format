@@ -1,4 +1,3 @@
-; editorconfig.org
 root = true
 
 [*]
@@ -10,11 +9,51 @@ insert_final_newline = true
 max_line_length = 160
 tab_width = 4
 trim_trailing_whitespace = true
+
 ij_continuation_indent_size = 4
-ij_visual_guides = 80,120,160
+ij_formatter_off_tag = @formatter:off
+ij_formatter_on_tag = @formatter:on
+ij_formatter_tags_enabled = true
+ij_smart_tabs = false
+ij_visual_guides = 80, 120, 160
+ij_wrap_on_typing = false
 
-[{*.md, *.yml}]
+ij_any_class_annotation_wrap = normal
+ij_any_field_annotation_wrap = normal
+ij_any_method_annotation_wrap = normal
+ij_any_parameter_annotation_wrap = normal
+ij_any_variable_annotation_wrap = normal
+
+[*.bat]
+end_of_line = crlf
+
+[{*.json, *.md, *.yaml}]
 indent_size = 2
+ij_continuation_indent_size = 2
+max_line_length = 80
 
-[*.md]
-max_line_length = 120
+[{*.kt, *.kts}]
+ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
+
+ij_kotlin_import_nested_classes = true
+ij_kotlin_imports_layout = *
+ij_kotlin_name_count_to_use_star_import = unset
+ij_kotlin_name_count_to_use_star_import_for_members = unset
+ij_kotlin_packages_to_use_import_on_demand = unset
+
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+
+ij_kotlin_line_comment_add_space = true
+
+ij_kotlin_blank_lines_after_class_header = 0
+ij_kotlin_blank_lines_before_declaration_with_comment_or_annotation_on_separate_line = 0
+ij_kotlin_keep_blank_lines_before_right_brace = 1
+ij_kotlin_keep_blank_lines_in_code = 1
+ij_kotlin_keep_blank_lines_in_declarations = 1
+
+[*.properties]
+ij_properties_align_group_field_declarations = false
+ij_properties_keep_blank_lines = true
+ij_properties_key_value_delimiter = equals
+ij_properties_spaces_around_key_value_delimiter = false

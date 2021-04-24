@@ -3,32 +3,29 @@ import org.jetbrains.gradle.ext.ModuleSettings
 import org.jetbrains.gradle.ext.PackagePrefixContainer
 
 plugins {
-    kotlin("jvm") version "1.4.30"
+    kotlin("jvm") version "1.4.32"
 
-    idea
+    id("idea")
     id("org.jetbrains.gradle.plugin.idea-ext") version "1.0"
 
-    signing
-    id("org.jetbrains.dokka") version "1.4.20"
-    id("de.marcphilipp.nexus-publish") version "0.4.0"
-    id("io.codearte.nexus-staging") version "0.22.0"
+    id("maven-publish")
+    id("signing")
+    id("org.jetbrains.dokka") version "1.4.32"
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
+
+val gitCommitId = provider { file(".git/refs/heads/main").readText().trim() }
+val javaVersion = provider { file(".java-version").readText().trim() }
 
 repositories {
     mavenCentral()
-    maven("https://dl.bintray.com/jetbrains/markdown")
-    maven("https://dl.bintray.com/korlibs/korlibs")
-    maven("https://dl.bintray.com/kotlin/dokka")
-    maven("https://dl.bintray.com/kotlin/kotlinx")
 }
 
 dependencies {
     api(kotlin("stdlib", "[1.3,)"))
 
-    val junitVersion = "5.7.1"
-    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testImplementation(platform("org.junit:junit-bom:5.7.1"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly(platform("org.junit:junit-bom:$junitVersion"))
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
@@ -56,49 +53,40 @@ kotlin {
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         allWarningsAsErrors = true
-        jvmTarget = file(".java-version").readText().trim()
+        jvmTarget = javaVersion.get()
         apiVersion = "1.3"
         languageVersion = "1.3"
     }
 }
 
-tasks.test {
+tasks.test.configure {
     useJUnitPlatform()
 }
 
-tasks.dokkaJavadoc {
+tasks.dokkaJavadoc.configure {
     outputDirectory.set(tasks.javadoc.map { checkNotNull(it.destinationDir) })
 }
 
-tasks.javadoc {
+tasks.javadoc.configure {
     dependsOn(tasks.dokkaJavadoc)
 }
 
-tasks.jar {
+tasks.jar.configure {
     manifest {
-        attributes["Name"] = "com/fleshgrinder/extensions/kotlin/"
+        attributes["Name"] = "com/fleshgrinder/kotlin/"
         attributes["Specification-Title"] = "Kotlin Case Format"
         attributes["Specification-Version"] = project.version
         attributes["Specification-Vendor"] = "Fleshgrinder"
-        attributes["Implementation-Title"] = "com.fleshgrinder.extensions.kotlin"
+        attributes["Implementation-Title"] = "com.fleshgrinder.kotlin"
         attributes["Implementation-Vendor"] = "Fleshgrinder"
         attributes["Implementation-Version"] = gitCommitId.get()
         attributes["Sealed"] = false
     }
 }
 
-val gitCommitId = provider { file(".git/refs/heads/master").readText().trim() }
-
-if ((version as String).endsWith("-SNAPSHOT")) {
-    gradle.startParameter.excludedTaskNames.apply {
-        add("signMavenJavaPublication")
-        add("closeAndReleaseRepository")
-    }
-}
-
 publishing {
     publications {
-        create<MavenPublication>("sonatype") {
+        register<MavenPublication>("sonatype") {
             from(components["java"])
             pom {
                 name.set("Kotlin Case Format")
@@ -134,20 +122,10 @@ publishing {
     }
 }
 
-nexusStaging {
-    packageGroup = "com.fleshgrinder"
-    stagingProfileId = "141a1dad946f"
-}
-
 nexusPublishing {
     repositories {
         sonatype {
-            // Documentation mentions that it will automatically take these
-            // values from nexusStaging but it actually does not work and
-            // :initializeSonatypeStagingRepository fails. Hence, we have to
-            // explicitly call this here.
-            username.set(project.providers.gradleProperty("nexusUsername").forUseAtConfigurationTime())
-            password.set(project.providers.gradleProperty("nexusPassword").forUseAtConfigurationTime())
+            stagingProfileId.set("141a1dad946f")
         }
     }
 }
