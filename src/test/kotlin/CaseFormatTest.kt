@@ -1,4 +1,4 @@
-package com.fleshgrinder.extensions.kotlin
+package com.fleshgrinder.kotlin
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

@@ -1,9 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.gradle.ext.ModuleSettings
+import org.jetbrains.gradle.ext.PackagePrefixContainer
 
 plugins {
     kotlin("jvm") version "1.4.30"
-    id("org.jetbrains.dokka") version "1.4.20"
+
+    idea
+    id("org.jetbrains.gradle.plugin.idea-ext") version "1.0"
+
     signing
+    id("org.jetbrains.dokka") version "1.4.20"
     id("de.marcphilipp.nexus-publish") version "0.4.0"
     id("io.codearte.nexus-staging") version "0.22.0"
 }
@@ -26,6 +32,18 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
+idea {
+    module {
+        isDownloadJavadoc = false
+        isDownloadSources = !System.getenv().containsKey("CI")
+
+        ((this as ExtensionAware).the<ModuleSettings>() as ExtensionAware).configure<PackagePrefixContainer> {
+            this["src/main/kotlin"] = "com.fleshgrinder"
+            this["src/test/kotlin"] = group as String
+        }
+    }
+}
+
 java {
     withSourcesJar()
     withJavadocJar()
@@ -40,6 +58,7 @@ tasks.withType<KotlinCompile>().configureEach {
         allWarningsAsErrors = true
         jvmTarget = file(".java-version").readText().trim()
         apiVersion = "1.3"
+        languageVersion = "1.3"
     }
 }
 
