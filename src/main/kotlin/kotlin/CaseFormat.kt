@@ -1,4 +1,4 @@
-package com.fleshgrinder.extensions.kotlin
+package com.fleshgrinder.kotlin
 
 private fun formatCamelCase(input: String, ignore: CharArray, upperCase: Boolean) =
     if (input.isEmpty()) input else StringBuilder(input.length).also {
@@ -43,7 +43,7 @@ private fun formatCamelCase(input: String, ignore: CharArray, upperCase: Boolean
  *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **lowerCamelCase** formatted [String]
- * @since 0.1.0
+ * @since 0.3.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toLowerCamelCase
  */
 public fun String.toLowerCamelCase(vararg ignore: Char): String =
@@ -57,7 +57,7 @@ public fun String.toLowerCamelCase(vararg ignore: Char): String =
  *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **UpperCamelCase** formatted [String]
- * @since 0.1.0
+ * @since 0.3.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toUpperCamelCase
  */
 public fun String.toUpperCamelCase(vararg ignore: Char): String =
@@ -112,7 +112,7 @@ private fun formatLowerCase(input: String, separator: Char, ignore: CharArray) =
  *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **lower case** formatted [String]
- * @since 0.1.0
+ * @since 0.3.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toLowerCaseFormat
  */
 public fun String.toLowerCaseFormat(separator: Char, vararg ignore: Char): String =
@@ -126,7 +126,7 @@ public fun String.toLowerCaseFormat(separator: Char, vararg ignore: Char): Strin
  *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **lower-dash-case** formatted [String]
- * @since 0.1.0
+ * @since 0.3.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toLowerDashCase
  */
 public fun String.toLowerDashCase(vararg ignore: Char): String =
@@ -139,7 +139,7 @@ public fun String.toLowerDashCase(vararg ignore: Char): String =
  *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **lower_snake_case** formatted [String]
- * @since 0.1.0
+ * @since 0.3.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toLowerSnakeCase
  */
 public fun String.toLowerSnakeCase(vararg ignore: Char): String =
@@ -157,7 +157,7 @@ private fun formatUpperCase(input: String, separator: Char, ignore: CharArray) =
  *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **UPPER CASE** formatted [String]
- * @since 0.1.0
+ * @since 0.3.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toUpperCaseFormat
  */
 public fun String.toUpperCaseFormat(separator: Char, vararg ignore: Char): String =
@@ -171,7 +171,7 @@ public fun String.toUpperCaseFormat(separator: Char, vararg ignore: Char): Strin
  *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **UPPER-DASH-CASE** formatted [String]
- * @since 0.1.0
+ * @since 0.3.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toUpperDashCase
  */
 public fun String.toUpperDashCase(vararg ignore: Char): String =
@@ -184,7 +184,7 @@ public fun String.toUpperDashCase(vararg ignore: Char): String =
  *   verbatim in the result, note that they are still considered separators
  * @receiver [String] to format
  * @return **UPPER_SNAKE_CASE** formatted [String]
- * @since 0.1.0
+ * @since 0.3.0
  * @sample com.fleshgrinder.extensions.kotlin.CaseFormatTest.toUpperSnakeCase
  */
 public fun String.toUpperSnakeCase(vararg ignore: Char): String =

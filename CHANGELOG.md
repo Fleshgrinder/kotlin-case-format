@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+### Added
+- `com.fleshgrinder.kotlin` package with the same functionality, this will
+  become the future permanent home for everything this project offers.
+### Deprecated
+- All functions in `com.fleshgrinder.extensions.kotlin`, they are `inline` now
+  and delegate to the new permanent home `com.fleshgrinder.kotlin`.
 
 ## [0.2.0] - 2020-02-20
 ### Changed
