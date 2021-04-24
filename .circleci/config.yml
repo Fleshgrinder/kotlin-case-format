@@ -10,13 +10,21 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "build.gradle.kts" }}
             - v1-dependencies-
-      - run: gradle dependencies
+      - run: gradle check
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/junit
+      - run:
+          command: gradle dependencies
+          when: always
       - save_cache:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle.kts" }}
-      - run: gradle check
-
-# TODO react to master merges and automatically generate docs (push with `[skip ci]`)
-# TODO react to tags and automatically publish
-# TODO react to tags and create GitHub release
