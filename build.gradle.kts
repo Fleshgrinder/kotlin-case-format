@@ -97,6 +97,7 @@ publishing {
                 licenses {
                     license {
                         name.set("Unlicense")
+                        comments.set("This is a public domain dedication")
                         url.set("https://unlicense.org/")
                         distribution.set("repo")
                     }
