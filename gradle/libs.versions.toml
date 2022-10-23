@@ -1,0 +1,18 @@
+[versions]
+dokka = "1.5.0"
+jmh = "0.6.5"
+junit = "5.7.2"
+kotlin = "1.5.21"
+nexus = "1.1.0"
+
+[plugins]
+jmh = { id = "me.champeau.jmh", version.ref = "jmh" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+publishing-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+publishing-nexus = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus" }
+
+[libraries]
+dokka-javadoc = { module = "org.jetbrains.dokka:kotlin-as-java-plugin", version.ref = "dokka" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api" }
+junit-runtime = { module = "org.junit.jupiter:junit-jupiter-engine" }

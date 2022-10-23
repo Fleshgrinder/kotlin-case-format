@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.fleshgrinder.extensions.kotlin
+package old.old.kotlin
 
 import com.fleshgrinder.kotlin.toLowerCamelCase as newToLowerCamelCase
 import com.fleshgrinder.kotlin.toLowerCaseFormat as newToLowerCaseFormat
